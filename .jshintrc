@@ -1,0 +1,11 @@
+{
+  "curly": true,
+  "esversion": 6,
+  "eqeqeq": true,
+  "strict": "global",
+  "globals": {
+    "_": false,
+    "moment": false,
+    "require": false
+  }
+}
