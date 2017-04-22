@@ -1,87 +1,838 @@
 <html>
-  <head>
-    <meta charset="utf8">
-    <title>SuitArt Business Card</title>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Sackers Gothic Std';
-        font-weight: 500;
-        font-size: 7px;
-        background: rgb(241,241,241);
-        -webkit-print-color-adjust: exact;
-        box-sizing: border-box;
-      }
-      .page {
-        position: relative;
-        height: 90mm;
-        width: 50mm;
-        display: block;
-        background: black;
-        page-break-after: auto;
-        margin: 50px;
-        overflow: hidden;
-      }
-      @media print {
-        body {
-          background: black;
-        }
-        .page {
-          margin: 0;
-          height: 100%;
-          width: 100%;
-        }
-      }
-      .page.first {
-        border-left: 5px solid green;
-      }
-      .bottom {
-        position: absolute;
-        left: 5mm;
-        right: 5mm;
-        bottom: 5mm;
-      }
-      .group {
-        margin-top: 3mm;
-      }
-      .line {
-        color: white;
-        position: relative;
-      }
-      .center {
-        text-align: center;
-      }
-      .logo {
-        position: relative;
-        width: 80%;
-        left: 10%;
-        top: 15%;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="page">
-      <div class="bottom">
-        <div class="line">Marc Bachmann</div>
-        <div class="line">cto</div>
+    <head>
+        <meta charset="utf8">
+        <title>Invoice</title>
+        <link rel="stylesheet" href="./css/invoice.css" />
+    </head>
+    <body>
+        <div class="invoice-box">
+            <div class="header" style="font-size: 16px;">
 
-        <div class="group">
-          <div class="line">p: +41 00 000 00 00</div>
-          <div class="line">github: marcbachmann</div>
+                <div class="inline-block full-height" style="width: 4in;">
+                    <img src="./img/shoreTVLogo.svg" class="logo">
+                    <div class="center align-top inline-block" style="margin-top: 16px; margin-left: 10px;">
+                        <div>1416 Goldstar Hwy</div>
+                        <div>Groton, CT 06340</div>
+                        <div>(860) 445-2471</div>
+                    </div>
+                </div>
+
+                <div class="inline-block full-height align-top">
+                    <div style="margin-top: 16px">
+                        <div class="inline-block text-right" style="width: 2in; margin-right: 5px;"><h3>Invoice #:</h3></div>
+                        <div class="inline-block">%%invoiceNumber%%</div>
+                    </div>
+                    <div class="inline-block" style="margin-top: 10px;">
+                        <div class="inline-block text-right" style="width: 2in; margin-right: 5px;"><h3>Date:</h3></div>
+                        <div class="inline-block">%%date%%</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Customer Information</h3>
+                    <div>%%customerName%%</div>
+                    <div>%%customerAddress%%</div>
+                    <div>%%customerCity%%, %customerState%% %%customerZip%%</div>
+                    <div>%%customerPhone1%%</div>
+                    <div>%%customerPhone2%%</div>
+                </div>
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Billing Information</h3>
+                    <div>%%billingName%%</div>
+                    <div>%%billingAddress%%</div>
+                    <div>%%billingCity%%, %billingState%% %%billingZip%%</div>
+                    <div>%%billingPhone1%%</div>
+                    <div>%%billingPhone2%%</div>
+                </div>
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Product Information</h3>
+
+                    <table style="font-size: 14px;">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-right"><span><b>Item:</b></span></td>
+                                <td>%%item%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Brand:</b></span></td>
+                                <td>%%brand%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Model:</b></span></td>
+                                <td>%%modelNumber%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Serial:</b></span></td>
+                                <td>%%serialNumber%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Purchased:</b></span></td>
+                                <td>%%dateOfPurchase%%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div>
+                    <table class="bordered-table">
+                        <caption><b>Requests/Complaints</b></caption>
+                        <thead></thead>
+                        <tbody>
+                            %%customerComplaint%%
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <div>
+                    <table class="bordered-table">
+                        <caption><b>Part List</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 19%;">
+                            <col span="1" style="width: 22%;">
+                            <col span="1" style="width: 22%;">
+                            <col span="1" style="width: 14%;">
+                            <col span="1" style="width: 6%;">
+                            <col span="1" style="width: 14%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Description</th>
+                                <th>Part Number</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            %%partsList%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <div class="inline-block service-calls align-top">
+                    <table class="bordered-table">
+                        <caption><b>Service Calls</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 50%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Tech</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            %%serviceCalls%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="inline-block payments align-top">
+                    <table class="pull-right">
+                        <thead></thead>
+                        <tbody class="text-right">
+                            <tr>
+                                <td><span><b>Subtotal:</b></span></td>
+                                <td><span>%%subtotal%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>Tax:</b></span></td>
+                                <td><span>%%tax%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>Total:</b></span></td>
+                                <td><span>%%total%%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="pull-right bordered-table">
+                        <caption><b>Payments</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 33%;">
+                            <col span="1" style="width: 33%;">
+                            <col span="1" style="width: 33%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-right">
+                            %%payments%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="pull-right total-due">
+                        <thead></thead>
+                        <tbody class="text-right">
+                            <tr>
+                                <td><span><h2><b>Amount Paid:</b></h2></span></td>
+                                <td><span>%%amountPaid%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><h2><b>Total Due:</b></h2></span></td>
+                                <td><span>%%totalDue%%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
         </div>
-        <div class="group">
-          <div class="line">suitart ag</div>
-          <div class="line">räffelstrasse 25</div>
-          <div class="line">8045 zürich</div>
+
+        <div class="page-break"></div>
+
+        <div class="invoice-box">
+            <div class="alt-header" style="font-size: 16px;">
+
+                <div class="inline-block full-height" style="width: 250px;">
+                    <div style="color: MediumBlue;"><h1>Tech Copy</h1></div>
+                </div>
+
+                <div class="inline-block full-height align-top" style="width: 280px;">
+                    <div style="margin-top: 10px">
+                        <div class="inline-block text-right" style="margin-right: 5px;"><h3>Invoice #:</h3></div>
+                        <div class="inline-block">%%invoiceNumber%%</div>
+                    </div>
+                </div>
+
+                <div class="inline-block full-height align-top" style="width: 210px;">
+                    <div style="margin-top: 10px;">
+                        <div class="inline-block text-right" style="margin-right: 5px;"><h3>Date:</h3></div>
+                        <div class="inline-block">%%date%%</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Customer Information</h3>
+                    <div>%%customerName%%</div>
+                    <div>%%customerAddress%%</div>
+                    <div>%%customerCity%%, %customerState%% %%customerZip%%</div>
+                    <div>%%customerPhone1%%</div>
+                    <div>%%customerPhone2%%</div>
+                </div>
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Billing Information</h3>
+                    <div>%%billingName%%</div>
+                    <div>%%billingAddress%%</div>
+                    <div>%%billingCity%%, %billingState%% %%billingZip%%</div>
+                    <div>%%billingPhone1%%</div>
+                    <div>%%billingPhone2%%</div>
+                </div>
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Product Information</h3>
+
+                    <table style="font-size: 14px;">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-right"><span><b>Item:</b></span></td>
+                                <td>%%item%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Brand:</b></span></td>
+                                <td>%%brand%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Model:</b></span></td>
+                                <td>%%modelNumber%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Serial:</b></span></td>
+                                <td>%%serialNumber%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Purchased:</b></span></td>
+                                <td>%%dateOfPurchase%%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div>
+                    <table class="bordered-table">
+                        <caption><b>Requests/Complaints</b></caption>
+                        <thead></thead>
+                        <tbody>
+                            %%customerComplaint%%
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <div>
+                    <table class="bordered-table">
+                        <caption><b>Part List</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 19%;">
+                            <col span="1" style="width: 22%;">
+                            <col span="1" style="width: 22%;">
+                            <col span="1" style="width: 14%;">
+                            <col span="1" style="width: 6%;">
+                            <col span="1" style="width: 14%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Description</th>
+                                <th>Part Number</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            %%partsList%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <table class="bordered-table">
+                    <caption><b>Service Description & Notes</b></caption>
+                    <thead></thead>
+                    <tbody>
+                        %%serviceDescription%%
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div class="inline-block service-calls align-top">
+                    <table class="bordered-table">
+                        <caption><b>Service Calls</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 50%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Tech</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            %%serviceCalls%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="signature-table">
+                        <colgroup>
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 90%;">
+                        </colgroup>
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td><span><b>X</b></span></td>
+                                <td style="border-bottom: 1px solid">&nbsp</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><span><b>Customer Signature</b></span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">&nbsp</td>
+                            </tr>
+                            <tr>
+                                <td><span><b>X</b></span></td>
+                                <td style="border-bottom: 1px solid">&nbsp</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><span><b>Tech Signature</b></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="inline-block payments align-top">
+                    <table class="pull-right">
+                        <thead></thead>
+                        <tbody class="text-right">
+                            <tr>
+                                <td><span><b>Subtotal:</b></span></td>
+                                <td><span>%%subtotal%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>Tax:</b></span></td>
+                                <td><span>%%tax%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>Total:</b></span></td>
+                                <td><span>%%total%%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="pull-right bordered-table">
+                        <caption><b>Payments</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 33%;">
+                            <col span="1" style="width: 33%;">
+                            <col span="1" style="width: 33%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-right">
+                            %%payments%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="pull-right total-due">
+                        <thead></thead>
+                        <tbody class="text-right">
+                            <tr>
+                                <td><span><h2><b>Amount Paid:</b></h2></span></td>
+                                <td><span>%%amountPaid%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><h2><b>Total Due:</b></h2></span></td>
+                                <td><span>%%totalDue%%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
         </div>
-      </div>
-    </div>
-    <div class="page">
-      <img class="logo" src="{{image}}">
-      <div class="bottom">
-          <div class="line center">8045 zürich</div>
-      </div>
-    </div>
-  </body>
+
+        <div class="page-break"></div>
+
+        <div class="invoice-box">
+            <div class="alt-header" style="font-size: 16px;">
+
+                <div class="inline-block full-height" style="width: 250px;">
+                    <div style="color: MediumBlue;"><h1>Store Copy</h1></div>
+                </div>
+
+                <div class="inline-block full-height align-top" style="width: 280px;">
+                    <div style="margin-top: 10px">
+                        <div class="inline-block text-right" style="margin-right: 5px;"><h3>Invoice #:</h3></div>
+                        <div class="inline-block">%%invoiceNumber%%</div>
+                    </div>
+                </div>
+
+                <div class="inline-block full-height align-top" style="width: 210px;">
+                    <div style="margin-top: 10px;">
+                        <div class="inline-block text-right" style="margin-right: 5px;"><h3>Date:</h3></div>
+                        <div class="inline-block">%%date%%</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Customer Information</h3>
+                    <div>%%customerName%%</div>
+                    <div>%%customerAddress%%</div>
+                    <div>%%customerCity%%, %customerState%% %%customerZip%%</div>
+                    <div>%%customerPhone1%%</div>
+                    <div>%%customerPhone2%%</div>
+                </div>
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Billing Information</h3>
+                    <div>%%billingName%%</div>
+                    <div>%%billingAddress%%</div>
+                    <div>%%billingCity%%, %billingState%% %%billingZip%%</div>
+                    <div>%%billingPhone1%%</div>
+                    <div>%%billingPhone2%%</div>
+                </div>
+
+                <div class="inline-block customer-info-section align-top">
+                    <h3>Product Information</h3>
+
+                    <table style="font-size: 14px;">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-right"><span><b>Item:</b></span></td>
+                                <td>%%item%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Brand:</b></span></td>
+                                <td>%%brand%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Model:</b></span></td>
+                                <td>%%modelNumber%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Serial:</b></span></td>
+                                <td>%%serialNumber%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Purchased:</b></span></td>
+                                <td>%%dateOfPurchase%%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div>
+                    <table class="bordered-table">
+                        <caption><b>Requests/Complaints</b></caption>
+                        <thead></thead>
+                        <tbody>
+                            %%customerComplaint%%
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <div>
+                    <table class="bordered-table">
+                        <caption><b>Part List</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 19%;">
+                            <col span="1" style="width: 22%;">
+                            <col span="1" style="width: 22%;">
+                            <col span="1" style="width: 14%;">
+                            <col span="1" style="width: 6%;">
+                            <col span="1" style="width: 14%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Description</th>
+                                <th>Part Number</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            %%partsList%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <table class="bordered-table">
+                    <caption><b>Service Description & Notes</b></caption>
+                    <thead></thead>
+                    <tbody>
+                        %%serviceDescription%%
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="invoice-section">
+
+                <div class="inline-block service-calls align-top">
+                    <table class="bordered-table">
+                        <caption><b>Service Calls</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 50%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Tech</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            %%serviceCalls%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="signature-table">
+                        <colgroup>
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 90%;">
+                        </colgroup>
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td><span><b>X</b></span></td>
+                                <td style="border-bottom: 1px solid">&nbsp</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><span><b>Customer Signature</b></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="inline-block payments align-top">
+                    <table class="pull-right">
+                        <thead></thead>
+                        <tbody class="text-right">
+                            <tr>
+                                <td><span><b>Subtotal:</b></span></td>
+                                <td><span>%%subtotal%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>Tax:</b></span></td>
+                                <td><span>%%tax%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>Total:</b></span></td>
+                                <td><span>%%total%%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="pull-right bordered-table">
+                        <caption><b>Payments</b></caption>
+                        <colgroup>
+                            <col span="1" style="width: 33%;">
+                            <col span="1" style="width: 33%;">
+                            <col span="1" style="width: 33%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-right">
+                            %%payments%%
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="pull-right total-due">
+                        <thead></thead>
+                        <tbody class="text-right">
+                            <tr>
+                                <td><span><h2><b>Amount Paid:</b></h2></span></td>
+                                <td><span>%%amountPaid%%</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><h2><b>Total Due:</b></h2></span></td>
+                                <td><span>%%totalDue%%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
 </html>

@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font: 14px/1.4 Georgia, serif;
+    background: white;
+    -webkit-print-color-adjust: exact;
+    box-sizing: border-box;
+}
+
+.invoice-box{
+    max-width:800px;
+    margin:auto;
+    padding:20px;
+}
+
+.page-break {
+    page-break-before: always;
+}
+
+.header {
+    width: 100%;
+    height: 100px;
+    border-bottom: 3px solid orange;
+}
+
+.alt-header {
+    width: 100%;
+    height: 50px;
+    border-bottom: 3px solid orange;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.logo {
+    width: 150px;
+    height: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+.align-top {
+    vertical-align: top;
+}
+
+.full-height {
+    height: 100%
+}
+
+.text-right {
+    text-align: right;
+}
+
+.invoice-section {
+    margin-top: 30px;
+}
+
+.customer-info-section {
+    width: 240px;
+    margin-right: 15px;
+}
+
+.product-info b {
+    margin-right: 10px;
+}
+
+.bordered-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+}
+
+.bordered-table td {
+    border: 1px solid black;
+}
+
+.bordered-table th {
+    border: 1px solid black;
+    background-color: Gainsboro;
+}
+
+td span {
+    margin: 0 10px;
+}
+
+.service-calls {
+    width: 350px;
+    margin-right: 30px;
+}
+
+.payments {
+    width: 390px;
+}
+
+.pull-right  {
+    float: right;
+}
+
+.payments .bordered-table {
+    margin-top: 20px;
+}
+
+.total-due {
+    margin-top: 20px;
+}
+
+.signature-table {
+    width: 100%;
+    margin-top: 30px;
+}

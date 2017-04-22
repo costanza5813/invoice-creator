@@ -5,6 +5,7 @@
   "strict": "global",
   "globals": {
     "_": false,
+    "__dirname": false,
     "moment": false,
     "require": false
   }
