@@ -8,7 +8,7 @@
         <div class="invoice-box">
             <div class="header" style="font-size: 16px;">
 
-                <div class="inline-block full-height" style="width: 4in;">
+                <div class="inline-block full-height" style="width: 350px;">
                     <img src="./img/shoreTVLogo.svg" class="logo">
                     <div class="center align-top inline-block" style="margin-top: 16px; margin-left: 10px;">
                         <div>1416 Goldstar Hwy</div>
@@ -19,12 +19,12 @@
 
                 <div class="inline-block full-height align-top">
                     <div style="margin-top: 16px">
-                        <div class="inline-block text-right" style="width: 2in; margin-right: 5px;"><h3>Invoice #:</h3></div>
+                        <div class="inline-block text-right" style="width: 240px; margin-right: 5px;"><h3>Invoice #:</h3></div>
                         <div class="inline-block">%%invoiceNumber%%</div>
                     </div>
                     <div class="inline-block" style="margin-top: 10px;">
-                        <div class="inline-block text-right" style="width: 2in; margin-right: 5px;"><h3>Date:</h3></div>
-                        <div class="inline-block">%%date%%</div>
+                        <div class="inline-block text-right" style="width: 240px; margin-right: 5px;"><h3>Date:</h3></div>
+                        <div class="inline-block">%%ticketDateOpen%%</div>
                     </div>
                 </div>
 
@@ -36,7 +36,7 @@
                     <h3>Customer Information</h3>
                     <div>%%customerName%%</div>
                     <div>%%customerAddress%%</div>
-                    <div>%%customerCity%%, %customerState%% %%customerZip%%</div>
+                    <div>%%customerCityStateZip%%</div>
                     <div>%%customerPhone1%%</div>
                     <div>%%customerPhone2%%</div>
                 </div>
@@ -45,7 +45,7 @@
                     <h3>Billing Information</h3>
                     <div>%%billingName%%</div>
                     <div>%%billingAddress%%</div>
-                    <div>%%billingCity%%, %billingState%% %%billingZip%%</div>
+                    <div>%%billingCityStateZip%%</div>
                     <div>%%billingPhone1%%</div>
                     <div>%%billingPhone2%%</div>
                 </div>
@@ -58,23 +58,23 @@
                         <tbody>
                             <tr>
                                 <td class="text-right"><span><b>Item:</b></span></td>
-                                <td>%%item%%</td>
+                                <td>%%productItem%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Brand:</b></span></td>
-                                <td>%%brand%%</td>
+                                <td>%%productBrand%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Model:</b></span></td>
-                                <td>%%modelNumber%%</td>
+                                <td>%%productModel%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Serial:</b></span></td>
-                                <td>%%serialNumber%%</td>
+                                <td>%%productSerial%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Purchased:</b></span></td>
-                                <td>%%dateOfPurchase%%</td>
+                                <td>%%productDate%%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,7 +90,7 @@
                         <caption><b>Requests/Complaints</b></caption>
                         <thead></thead>
                         <tbody>
-                            %%customerComplaint%%
+                            %%ticketComplaint%%
                             <tr>
                                 <td>&nbsp;</td>
                             </tr>
@@ -126,7 +126,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            %%partsList%%
+                            %%ticketPartList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -188,7 +188,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            %%serviceCalls%%
+                            %%ticketServiceCallList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -211,15 +211,15 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><b>Subtotal:</b></span></td>
-                                <td><span>%%subtotal%%</span></td>
+                                <td><span>%%ticketSubtotal%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Tax:</b></span></td>
-                                <td><span>%%tax%%</span></td>
+                                <td><span>%%ticketTax%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Total:</b></span></td>
-                                <td><span>%%total%%</span></td>
+                                <td><span>%%ticketTotal%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -239,7 +239,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-right">
-                            %%payments%%
+                            %%ticketPaymentList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -253,11 +253,11 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><h2><b>Amount Paid:</b></h2></span></td>
-                                <td><span>%%amountPaid%%</span></td>
+                                <td><span>%%ticketAmountPaid%%</span></td>
                             </tr>
                             <tr>
-                                <td><span><h2><b>Total Due:</b></h2></span></td>
-                                <td><span>%%totalDue%%</span></td>
+                                <td><span><h2><b>Balance Due:</b></h2></span></td>
+                                <td><span>%%ticketBalanceDue%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -273,7 +273,7 @@
         <div class="invoice-box">
             <div class="alt-header" style="font-size: 16px;">
 
-                <div class="inline-block full-height" style="width: 250px;">
+                <div class="inline-block full-height" style="width: 230px;">
                     <div style="color: MediumBlue;"><h1>Tech Copy</h1></div>
                 </div>
 
@@ -284,10 +284,10 @@
                     </div>
                 </div>
 
-                <div class="inline-block full-height align-top" style="width: 210px;">
+                <div class="inline-block full-height align-top" style="width: 230px;">
                     <div style="margin-top: 10px;">
                         <div class="inline-block text-right" style="margin-right: 5px;"><h3>Date:</h3></div>
-                        <div class="inline-block">%%date%%</div>
+                        <div class="inline-block">%%ticketDateOpen%%</div>
                     </div>
                 </div>
 
@@ -299,7 +299,7 @@
                     <h3>Customer Information</h3>
                     <div>%%customerName%%</div>
                     <div>%%customerAddress%%</div>
-                    <div>%%customerCity%%, %customerState%% %%customerZip%%</div>
+                    <div>%%customerCityStateZip%%</div>
                     <div>%%customerPhone1%%</div>
                     <div>%%customerPhone2%%</div>
                 </div>
@@ -308,7 +308,7 @@
                     <h3>Billing Information</h3>
                     <div>%%billingName%%</div>
                     <div>%%billingAddress%%</div>
-                    <div>%%billingCity%%, %billingState%% %%billingZip%%</div>
+                    <div>%%billingCityStateZip%%</div>
                     <div>%%billingPhone1%%</div>
                     <div>%%billingPhone2%%</div>
                 </div>
@@ -321,23 +321,23 @@
                         <tbody>
                             <tr>
                                 <td class="text-right"><span><b>Item:</b></span></td>
-                                <td>%%item%%</td>
+                                <td>%%productItem%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Brand:</b></span></td>
-                                <td>%%brand%%</td>
+                                <td>%%productBrand%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Model:</b></span></td>
-                                <td>%%modelNumber%%</td>
+                                <td>%%productModel%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Serial:</b></span></td>
-                                <td>%%serialNumber%%</td>
+                                <td>%%productSerial%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Purchased:</b></span></td>
-                                <td>%%dateOfPurchase%%</td>
+                                <td>%%productDate%%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -353,7 +353,7 @@
                         <caption><b>Requests/Complaints</b></caption>
                         <thead></thead>
                         <tbody>
-                            %%customerComplaint%%
+                            %%ticketComplaint%%
                             <tr>
                                 <td>&nbsp;</td>
                             </tr>
@@ -389,7 +389,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            %%partsList%%
+                            %%ticketPartList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -425,7 +425,7 @@
                     <caption><b>Service Description & Notes</b></caption>
                     <thead></thead>
                     <tbody>
-                        %%serviceDescription%%
+                        %%ticketServiceNotes%%
                         <tr>
                             <td>&nbsp;</td>
                         </tr>
@@ -453,7 +453,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            %%serviceCalls%%
+                            %%ticketServiceCallList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -499,15 +499,15 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><b>Subtotal:</b></span></td>
-                                <td><span>%%subtotal%%</span></td>
+                                <td><span>%%ticketSubtotal%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Tax:</b></span></td>
-                                <td><span>%%tax%%</span></td>
+                                <td><span>%%ticketTax%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Total:</b></span></td>
-                                <td><span>%%total%%</span></td>
+                                <td><span>%%ticketTotal%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -527,7 +527,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-right">
-                            %%payments%%
+                            %%ticketPaymentList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -541,11 +541,11 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><h2><b>Amount Paid:</b></h2></span></td>
-                                <td><span>%%amountPaid%%</span></td>
+                                <td><span>%%ticketAmountPaid%%</span></td>
                             </tr>
                             <tr>
-                                <td><span><h2><b>Total Due:</b></h2></span></td>
-                                <td><span>%%totalDue%%</span></td>
+                                <td><span><h2><b>Balance Due:</b></h2></span></td>
+                                <td><span>%%ticketBalanceDue%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -561,7 +561,7 @@
         <div class="invoice-box">
             <div class="alt-header" style="font-size: 16px;">
 
-                <div class="inline-block full-height" style="width: 250px;">
+                <div class="inline-block full-height" style="width: 230px;">
                     <div style="color: MediumBlue;"><h1>Store Copy</h1></div>
                 </div>
 
@@ -572,10 +572,10 @@
                     </div>
                 </div>
 
-                <div class="inline-block full-height align-top" style="width: 210px;">
+                <div class="inline-block full-height align-top" style="width: 230px;">
                     <div style="margin-top: 10px;">
                         <div class="inline-block text-right" style="margin-right: 5px;"><h3>Date:</h3></div>
-                        <div class="inline-block">%%date%%</div>
+                        <div class="inline-block">%%ticketDateOpen%%</div>
                     </div>
                 </div>
 
@@ -587,7 +587,7 @@
                     <h3>Customer Information</h3>
                     <div>%%customerName%%</div>
                     <div>%%customerAddress%%</div>
-                    <div>%%customerCity%%, %customerState%% %%customerZip%%</div>
+                    <div>%%customerCityStateZip%%</div>
                     <div>%%customerPhone1%%</div>
                     <div>%%customerPhone2%%</div>
                 </div>
@@ -596,7 +596,7 @@
                     <h3>Billing Information</h3>
                     <div>%%billingName%%</div>
                     <div>%%billingAddress%%</div>
-                    <div>%%billingCity%%, %billingState%% %%billingZip%%</div>
+                    <div>%%billingCityStateZip%%</div>
                     <div>%%billingPhone1%%</div>
                     <div>%%billingPhone2%%</div>
                 </div>
@@ -609,23 +609,23 @@
                         <tbody>
                             <tr>
                                 <td class="text-right"><span><b>Item:</b></span></td>
-                                <td>%%item%%</td>
+                                <td>%%productItem%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Brand:</b></span></td>
-                                <td>%%brand%%</td>
+                                <td>%%productBrand%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Model:</b></span></td>
-                                <td>%%modelNumber%%</td>
+                                <td>%%productModel%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Serial:</b></span></td>
-                                <td>%%serialNumber%%</td>
+                                <td>%%productSerial%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Purchased:</b></span></td>
-                                <td>%%dateOfPurchase%%</td>
+                                <td>%%productDate%%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -641,7 +641,7 @@
                         <caption><b>Requests/Complaints</b></caption>
                         <thead></thead>
                         <tbody>
-                            %%customerComplaint%%
+                            %%ticketComplaint%%
                             <tr>
                                 <td>&nbsp;</td>
                             </tr>
@@ -677,7 +677,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            %%partsList%%
+                            %%ticketPartList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -713,7 +713,7 @@
                     <caption><b>Service Description & Notes</b></caption>
                     <thead></thead>
                     <tbody>
-                        %%serviceDescription%%
+                        %%ticketServiceNotes%%
                         <tr>
                             <td>&nbsp;</td>
                         </tr>
@@ -741,7 +741,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            %%serviceCalls%%
+                            %%ticketServiceCallList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -777,15 +777,15 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><b>Subtotal:</b></span></td>
-                                <td><span>%%subtotal%%</span></td>
+                                <td><span>%%ticketSubtotal%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Tax:</b></span></td>
-                                <td><span>%%tax%%</span></td>
+                                <td><span>%%ticketTax%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Total:</b></span></td>
-                                <td><span>%%total%%</span></td>
+                                <td><span>%%ticketTotal%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -805,7 +805,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-right">
-                            %%payments%%
+                            %%ticketPaymentList%%
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -819,11 +819,11 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><h2><b>Amount Paid:</b></h2></span></td>
-                                <td><span>%%amountPaid%%</span></td>
+                                <td><span>%%ticketAmountPaid%%</span></td>
                             </tr>
                             <tr>
-                                <td><span><h2><b>Total Due:</b></h2></span></td>
-                                <td><span>%%totalDue%%</span></td>
+                                <td><span><h2><b>Balance Due:</b></h2></span></td>
+                                <td><span>%%ticketBalanceDue%%</span></td>
                             </tr>
                         </tbody>
                     </table>
