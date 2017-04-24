@@ -14,6 +14,8 @@ var config = {
   base: 'file:///' + __dirname.replace(/\\/g, '/') + '/'
 };
 
+var paymentTypes = ['GCAF', 'COD / Other', 'Credit', 'Check', 'Cash', 'Warranty'];
+
 var constants = {
   invoiceTemplate: './app/tpl/invoice.tpl.html',
   complaintTemplate: './app/tpl/complaint.tpl.html',
@@ -237,7 +239,9 @@ app.post('/invoice', function (req, res) {
   _.each(_.get(req.body.ticket, 'payments', []), function(payment) {
     var paymentCopy = paymentTpl;
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentDate, _.get(payment, 'paymentDate', ''));
-    paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentType, _.get(payment, 'paymentType', ''));
+
+    var pymntType = paymentTypes[payment.paymentType] || '';
+    paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentType, pymntType);
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentAmount, formatCurrency(_.get(payment, 'paymentAmount', 0) * -1));
 
     paymentListReplace += paymentCopy;
