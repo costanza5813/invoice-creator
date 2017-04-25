@@ -4,8 +4,22 @@ var bodyParser = require("body-parser");
 var fs = require('fs');
 var pdf = require('html-pdf');
 var uuid = require('uuid/v4');
+var proxy = require('http-proxy-middleware');
 
 var app = express();
+app.set('port', 9085);
+
+// Serve the static directory where the angular app is located
+app.use(express.static(__dirname + '/../../appliance-point-of-sale/dist/'));
+
+// Proxy to send the /ShoreTVCustomers requests to 9083
+var shoreTvCustomersProxy = proxy({
+  target: 'http://localhost:9083',
+  changeOrigin: false,
+});
+
+app.use('/ShoreTVCustomers', shoreTvCustomersProxy);
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -14,9 +28,57 @@ var config = {
   base: 'file:///' + __dirname.replace(/\\/g, '/') + '/'
 };
 
-var paymentTypes = ['GCAF', 'COD / Other', 'Credit', 'Check', 'Cash', 'Warranty'];
+//
+// post to invoice to create the pdf file
+//
+app.post('/invoice', function (req, res) {
 
+  if (!req.body.customer || !req.body.ticket) {
+    res.status(400).send('You must include customer and ticket details!');
+    return;
+  }
+
+  var invoice = createInvoice(req.body);
+  var id = uuid();
+  pdf.create(invoice, config).toFile('./app/tmp/' + id + '.pdf', function (err) {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+
+    res.json({ invoiceId: id });
+  });
+});
+
+//
+// get the created pdf file with the specified id
+//
+app.get('/invoice/:id', function (req, res) {
+  if (!req.params.id) {
+    res.status(400).send('You must include the invoice id!');
+    return;
+  }
+
+  var filePath = './app/tmp/' + req.params.id + '.pdf';
+  if (!fs.existsSync(filePath)) {
+    res.status(404).send('Invoice not found!');
+    return;
+  }
+
+  res.contentType("application/pdf");
+  res.send(fs.readFileSync(filePath));
+});
+
+app.listen(app.get('port'), function () {
+  console.log('Express server listening on port: ' + app.get('port'));
+});
+
+//
+// constants for creating the html file
+//
 var constants = {
+  paymentTypes: ['GCAF', 'COD / Other', 'Credit', 'Check', 'Cash', 'Warranty'],
+
   invoiceTemplate: './app/tpl/invoice.tpl.html',
   complaintTemplate: './app/tpl/complaint.tpl.html',
   partTemplate: './app/tpl/part.tpl.html',
@@ -104,7 +166,7 @@ function formatPhoneNumber(phoneNumber) {
 }
 
 function formatCurrency(amount) {
-  var sign = amount < 0 ? "-" : "";
+  var sign = parseFloat(amount.toFixed(2)) < 0 ? "-" : "";
 
   var wholePart = parseInt(Math.abs(amount)).toString();
   var highestPartLength = wholePart.length > 3 ? wholePart.length % 3 : 0;
@@ -116,79 +178,71 @@ function formatCurrency(amount) {
   return retVal;
 }
 
-app.get('/invoice/:id', function (req, res) {
-  if (!req.params.id) {
-    res.status(400).send('You must include the invoice id!');
-    return;
-  }
-
-  var filePath = './app/tmp/' + req.params.id + '.pdf';
-  if (!fs.existsSync(filePath)) {
-    res.status(404).send('Invoice not found!');
-    return;
-  }
-
-  res.contentType("application/pdf");
-  res.send(fs.readFileSync(filePath));
-});
-
-app.post('/invoice', function (req, res) {
-
-  if (!req.body.customer || !req.body.ticket) {
-    res.status(400).send('You must include customer and ticket details!');
-    return;
-  }
+function createInvoice(data) {
 
   // read in template file
   var invoice =  fs.readFileSync(constants.invoiceTemplate, 'utf8');
 
   // header fields
-  invoice = replaceAll(invoice, constants.invoiceNumber, _.get(req.body.ticket, 'id', ''));
-  invoice = replaceAll(invoice, constants.ticketDateOpen, _.get(req.body.ticket, 'dateOpen', ''));
+  invoice = replaceAll(invoice, constants.invoiceNumber, _.get(data.ticket, 'id', ''));
+  invoice = replaceAll(invoice, constants.ticketDateOpen, _.get(data.ticket, 'dateOpen', ''));
 
   // customer info
-  invoice = replaceAll(invoice, constants.customerName,
-                       _.get(req.body.customer, 'firstName', '') + ' ' + _.get(req.body.customer, 'lastName', ''));
-  invoice = replaceAll(invoice, constants.customerAddress, _.get(req.body.customer, 'address', ''));
+  invoice = replaceAll(invoice, constants.customerName, _.get(data.customer, 'firstName', '') + ' ' + _.get(data.customer, 'lastName', ''));
+  invoice = replaceAll(invoice, constants.customerAddress, _.get(data.customer, 'address', ''));
 
-  var customerCity = _.get(req.body.customer, 'city', '');
-  var customerState = _.get(req.body.customer, 'state', '');
-  var customerZip = _.get(req.body.customer, 'zip', '');
+  var customerCity = _.get(data.customer, 'city', '');
+  var customerState = _.get(data.customer, 'state', '');
+  var customerZip = _.get(data.customer, 'zip', '');
 
   var customerCityStateZip = (customerCity ? customerCity + ',' : '') + ' ' + customerState + ' ' + customerZip;
 
   invoice = replaceAll(invoice, constants.customerCityStateZip, customerCityStateZip);
 
-  invoice = replaceAll(invoice, constants.customerPhone1, formatPhoneNumber(_.get(req.body.customer, 'phoneNumber', '')));
-  invoice = replaceAll(invoice, constants.customerPhone2, formatPhoneNumber(_.get(req.body.customer, 'workNumber', '')));
+  invoice = replaceAll(invoice, constants.customerPhone1, formatPhoneNumber(_.get(data.customer, 'phoneNumber', '')));
+  invoice = replaceAll(invoice, constants.customerPhone2, formatPhoneNumber(_.get(data.customer, 'workNumber', '')));
 
   // billing info
-  invoice = replaceAll(invoice, constants.billingName,
-                       _.get(req.body.ticket, 'firstName', '') + ' ' + _.get(req.body.ticket, 'lastName', ''));
-  invoice = replaceAll(invoice, constants.billingAddress, _.get(req.body.ticket, 'address', ''));
+  var billingKeys = ['billingName', 'billingLastName', 'billingAddress', 'billingCity', 'billingState', 'billingZip', 'billingPhone1', 'billingPhone2'];
+  if(_.chain(data.ticket).pick(billingKeys).some().value()) {
+    invoice = replaceAll(invoice, constants.billingName, _.get(data.ticket, 'billingName', '') + ' ' + _.get(data.ticket, 'billingLastName', ''));
+    invoice = replaceAll(invoice, constants.billingAddress, _.get(data.ticket, 'billingAddress', ''));
 
-  var billingCity = _.get(req.body.ticket, 'city', '');
-  var billingState = _.get(req.body.ticket, 'state', '');
-  var billingZip = _.get(req.body.ticket, 'zip', '');
+    var billingCity = _.get(data.ticket, 'billingCity', '');
+    var billingState = _.get(data.ticket, 'billingState', '');
+    var billingZip = _.get(data.ticket, 'billingZip', '');
 
-  var billingCityStateZip = (billingCity ? billingCity + ',' : '') + ' ' + billingState + ' ' + billingZip;
+    var billingCityStateZip = (billingCity ? billingCity + ',' : '') + ' ' + billingState + ' ' + billingZip;
 
-  invoice = replaceAll(invoice, constants.billingCityStateZip, billingCityStateZip || customerCityStateZip);
+    invoice = replaceAll(invoice, constants.billingCityStateZip, billingCityStateZip);
 
-  invoice = replaceAll(invoice, constants.billingPhone1, formatPhoneNumber(_.get(req.body.ticket, 'phoneNumber', '')));
-  invoice = replaceAll(invoice, constants.billingPhone2, formatPhoneNumber(_.get(req.body.ticket, 'workNumber', '')));
+    invoice = replaceAll(invoice, constants.billingPhone1, formatPhoneNumber(_.get(data.ticket, 'billingPhone1', '')));
+    invoice = replaceAll(invoice, constants.billingPhone2, formatPhoneNumber(_.get(data.ticket, 'billingPhone2', '')));
+  } else {
+    invoice = replaceAll(invoice, constants.billingName, _.get(data.customer, 'firstName', '') + ' ' + _.get(data.ticket, 'lastName', ''));
+    invoice = replaceAll(invoice, constants.billingAddress, _.get(data.customer, 'address', ''));
+
+    invoice = replaceAll(invoice, constants.billingCityStateZip, customerCityStateZip);
+
+    invoice = replaceAll(invoice, constants.billingPhone1, formatPhoneNumber(_.get(data.customer, 'phoneNumber', '')));
+    invoice = replaceAll(invoice, constants.billingPhone2, formatPhoneNumber(_.get(data.customer, 'workNumber', '')));
+  }
 
   // product info
-  invoice = replaceAll(invoice, constants.productItem, _.get(req.body.ticket, 'item', ''));
-  invoice = replaceAll(invoice, constants.productBrand, _.get(req.body.ticket, 'brand', ''));
-  invoice = replaceAll(invoice, constants.productModel, _.get(req.body.ticket, 'model', ''));
-  invoice = replaceAll(invoice, constants.productSerial, _.get(req.body.ticket, 'serialNumber', ''));
-  invoice = replaceAll(invoice, constants.productDate, _.get(req.body.ticket, 'dateOfPurchase', ''));
+  invoice = replaceAll(invoice, constants.productItem, _.get(data.ticket, 'item', ''));
+  invoice = replaceAll(invoice, constants.productBrand, _.get(data.ticket, 'brand', ''));
+  invoice = replaceAll(invoice, constants.productModel, _.get(data.ticket, 'model', ''));
+  invoice = replaceAll(invoice, constants.productSerial, _.get(data.ticket, 'serialNumber', ''));
+  invoice = replaceAll(invoice, constants.productDate, _.get(data.ticket, 'dateOfPurchase', ''));
 
   // customer complaints
   var complaintTpl =  fs.readFileSync(constants.complaintTemplate, 'utf8');
   var complaintReplace = '';
-  _.each(_.get(req.body.ticket, 'customerComplaint', '').split('\r\n'), function(line) {
+  _.each(_.get(data.ticket, 'customerComplaint', '').split('\n'), function(line) {
+    if (!line) {
+      return true;
+    }
+
     complaintReplace += replaceAll(complaintTpl, constants.ticketComplaintLine, line);
   });
 
@@ -197,7 +251,7 @@ app.post('/invoice', function (req, res) {
   //parts list
   var partTpl =  fs.readFileSync(constants.partTemplate, 'utf8');
   var partListReplace = '';
-  _.each(_.get(req.body.ticket, 'parts', []), function(part) {
+  _.each(_.get(data.ticket, 'parts', []), function(part) {
     var partCopy = partTpl;
     partCopy = replaceAll(partCopy, constants.ticketPartListPartBrand, _.get(part, 'brand', ''));
     partCopy = replaceAll(partCopy, constants.ticketPartListPartDescription, _.get(part, 'description', ''));
@@ -214,7 +268,11 @@ app.post('/invoice', function (req, res) {
   // service notes
   var serviceNotesTpl =  fs.readFileSync(constants.serviceNotesTemplate, 'utf8');
   var serviceNotesReplace = '';
-  _.each(_.get(req.body.ticket, 'serviceDescription', '').split('\r\n'), function(line) {
+  _.each(_.get(data.ticket, 'serviceDescription', '').split('\n'), function(line) {
+    if (!line) {
+      return true;
+    }
+
     serviceNotesReplace += replaceAll(serviceNotesTpl, constants.ticketServiceNotesLine, line);
   });
 
@@ -223,7 +281,7 @@ app.post('/invoice', function (req, res) {
   // service call list
   var serviceCallTpl =  fs.readFileSync(constants.serviceCallTemplate, 'utf8');
   var serviceCallListReplace = '';
-  _.each(_.get(req.body.ticket, 'serviceCalls', []), function(sc) {
+  _.each(_.get(data.ticket, 'serviceCalls', []), function(sc) {
     var serviceCallCopy = serviceCallTpl;
     serviceCallCopy = replaceAll(serviceCallCopy, constants.ticketServiceCallListDateTime, _.get(sc, 'serviceDate', ''));
     serviceCallCopy = replaceAll(serviceCallCopy, constants.ticketServiceCallListTech, _.get(sc, 'tech', ''));
@@ -236,11 +294,11 @@ app.post('/invoice', function (req, res) {
   // payment list
   var paymentTpl =  fs.readFileSync(constants.paymentTemplate, 'utf8');
   var paymentListReplace = '';
-  _.each(_.get(req.body.ticket, 'payments', []), function(payment) {
+  _.each(_.get(data.ticket, 'payments', []), function(payment) {
     var paymentCopy = paymentTpl;
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentDate, _.get(payment, 'paymentDate', ''));
 
-    var pymntType = paymentTypes[payment.paymentType] || '';
+    var pymntType = constants.paymentTypes[payment.paymentType] || '';
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentType, pymntType);
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentAmount, formatCurrency(_.get(payment, 'paymentAmount', 0) * -1));
 
@@ -250,23 +308,11 @@ app.post('/invoice', function (req, res) {
   invoice = replaceAll(invoice, constants.ticketPaymentList, paymentListReplace);
 
   // totals
-  invoice = replaceAll(invoice, constants.ticketSubtotal, formatCurrency(_.get(req.body.ticket, 'subtotal', 0)));
-  invoice = replaceAll(invoice, constants.ticketTax, formatCurrency(_.get(req.body.ticket, 'tax', 0)));
-  invoice = replaceAll(invoice, constants.ticketTotal, formatCurrency(_.get(req.body.ticket, 'total', 0)));
-  invoice = replaceAll(invoice, constants.ticketAmountPaid, formatCurrency(_.get(req.body.ticket, 'amountPaid', 0) * -1));
-  invoice = replaceAll(invoice, constants.ticketBalanceDue, formatCurrency(_.get(req.body.ticket, 'balanceDue', 0)));
+  invoice = replaceAll(invoice, constants.ticketSubtotal, formatCurrency(_.get(data.ticket, 'subtotal', 0)));
+  invoice = replaceAll(invoice, constants.ticketTax, formatCurrency(_.get(data.ticket, 'tax', 0)));
+  invoice = replaceAll(invoice, constants.ticketTotal, formatCurrency(_.get(data.ticket, 'total', 0)));
+  invoice = replaceAll(invoice, constants.ticketAmountPaid, formatCurrency(_.get(data.ticket, 'amountPaid', 0) * -1));
+  invoice = replaceAll(invoice, constants.ticketBalanceDue, formatCurrency(_.get(data.ticket, 'balanceDue', 0)));
 
-  var id = uuid();
-  pdf.create(invoice, config).toFile('./app/tmp/' + id + '.pdf', function (err) {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-
-    res.json({ invoiceId: id });
-  });
-});
-
-app.listen(9085, function () {
-  console.log('Listening for invoice requests!');
-});
+  return invoice;
+}
