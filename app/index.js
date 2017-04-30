@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/../../appliance-point-of-sale/dist/'));
 // Proxy to send the /ShoreTVCustomers requests to 9083
 var shoreTvCustomersProxy = proxy({
   target: 'http://localhost:9083',
-  changeOrigin: false,
+  changeOrigin: true,
   pathRewrite: {
     '^/ShoreTVCustomers/ServiceTickets/customers': '/ShoreTVCustomers/Customers/customers',
     '^/ShoreTVCustomers/ServiceTickets/UI001/': '/',
