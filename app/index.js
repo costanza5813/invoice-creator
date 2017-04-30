@@ -22,6 +22,7 @@ var shoreTvCustomersProxy = proxy({
     '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice'
   },
   router: {
+    '/ShoreTVCustomers/Customers/customers': 'http://localhost:9084',
     '/ShoreTVCustomers/ServiceTickets/customers': 'http://localhost:9084',
     '/ShoreTVCustomers/ServiceTickets/UI001': 'http://localhost:9085',
     '/ShoreTVCustomers/ServiceTickets/invoice': 'http://localhost:9085'
