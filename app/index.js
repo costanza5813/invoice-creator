@@ -17,9 +17,12 @@ var shoreTvCustomersProxy = proxy({
   target: 'http://localhost:9083',
   changeOrigin: false,
   pathRewrite: {
+    '^/ShoreTVCustomers/ServiceTickets/UI001/': '/',
     '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice'
   },
   router: {
+    '/ShoreTVCustomers/ServiceTickets/customers': 'http://localhost:9084',
+    '/ShoreTVCustomers/ServiceTickets/UI001': 'http://localhost:9085',
     '/ShoreTVCustomers/ServiceTickets/invoice': 'http://localhost:9085'
   }
 });
