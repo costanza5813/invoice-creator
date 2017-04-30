@@ -16,6 +16,12 @@ app.use(express.static(__dirname + '/../../appliance-point-of-sale/dist/'));
 var shoreTvCustomersProxy = proxy({
   target: 'http://localhost:9083',
   changeOrigin: false,
+  pathRewrite: {
+    '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice'
+  },
+  router: {
+    '/ShoreTVCustomers/ServiceTickets/invoice': 'http://localhost:9085'
+  }
 });
 
 app.use('/ShoreTVCustomers', shoreTvCustomersProxy);
