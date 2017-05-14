@@ -8,22 +8,22 @@
         <div class="invoice-box">
             <div class="header" style="font-size: 16px;">
 
-                <div class="inline-block full-height" style="width: 350px;">
+                <div class="inline-block full-height" style="width: 500px;">
                     <img src="./img/shoreTVLogo.svg" class="logo">
-                    <div class="center align-top inline-block" style="margin-top: 16px; margin-left: 10px;">
-                        <div>1416 Goldstar Hwy</div>
-                        <div>Groton, CT 06340</div>
-                        <div>(860) 445-2471</div>
+                    <div class="center align-top inline-block" style="margin-top: 16px; margin-left: 10px; font-size: 12px; line-height: 24px;">
+                        <div>11 East Main Street, Clinton, CT - (860) 669-8007</div>
+                        <div>280 Middlesex Tnpk. Old Saybrook, CT - (860) 388-3040</div>
+                        <div>1416 Gold Star Highway, Groton, CT - (860) 445-2471</div>
                     </div>
                 </div>
 
                 <div class="inline-block full-height align-top">
                     <div style="margin-top: 16px">
-                        <div class="inline-block text-right" style="width: 240px; margin-right: 5px;"><h3>Invoice #:</h3></div>
+                        <div class="inline-block text-right" style="width: 120px; margin-right: 5px;"><h3>Invoice #:</h3></div>
                         <div class="inline-block">%%invoiceNumber%%</div>
                     </div>
                     <div class="inline-block" style="margin-top: 10px;">
-                        <div class="inline-block text-right" style="width: 240px; margin-right: 5px;"><h3>Date:</h3></div>
+                        <div class="inline-block text-right" style="width: 120px; margin-right: 5px;"><h3>Date:</h3></div>
                         <div class="inline-block">%%ticketDateOpen%%</div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="inline-block customer-info-section align-top">
-                    <h3>Billing Information</h3>
+                    <h3>Service Information</h3>
                     <div>%%billingName%%</div>
                     <div>%%billingAddress%%</div>
                     <div>%%billingCityStateZip%%</div>
@@ -87,19 +87,31 @@
 
                 <div>
                     <table class="bordered-table">
-                        <caption><b>Requests/Complaints</b></caption>
+                        <caption><b>Service Requests</b></caption>
                         <thead></thead>
                         <tbody>
                             %%ticketComplaint%%
                             <tr>
                                 <td>&nbsp;</td>
                             </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <table class="bordered-table">
+                    <caption><b>Service Description & Notes</b></caption>
+                    <thead></thead>
+                    <tbody>
+                        %%ticketServiceNotes%%
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
 
             <div class="invoice-section">
@@ -159,14 +171,6 @@
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                             </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -189,10 +193,6 @@
                         </thead>
                         <tbody>
                             %%ticketServiceCallList%%
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -305,7 +305,7 @@
                 </div>
 
                 <div class="inline-block customer-info-section align-top">
-                    <h3>Billing Information</h3>
+                    <h3>Service Information</h3>
                     <div>%%billingName%%</div>
                     <div>%%billingAddress%%</div>
                     <div>%%billingCityStateZip%%</div>
@@ -350,19 +350,31 @@
 
                 <div>
                     <table class="bordered-table">
-                        <caption><b>Requests/Complaints</b></caption>
+                        <caption><b>Service Requests</b></caption>
                         <thead></thead>
                         <tbody>
                             %%ticketComplaint%%
                             <tr>
                                 <td>&nbsp;</td>
                             </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <table class="bordered-table">
+                    <caption><b>Service Description & Notes</b></caption>
+                    <thead></thead>
+                    <tbody>
+                        %%ticketServiceNotes%%
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
 
             <div class="invoice-section">
@@ -417,24 +429,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div class="invoice-section">
-
-                <table class="bordered-table">
-                    <caption><b>Service Description & Notes</b></caption>
-                    <thead></thead>
-                    <tbody>
-                        %%ticketServiceNotes%%
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-
             </div>
 
             <div class="invoice-section">
@@ -593,7 +587,7 @@
                 </div>
 
                 <div class="inline-block customer-info-section align-top">
-                    <h3>Billing Information</h3>
+                    <h3>Service Information</h3>
                     <div>%%billingName%%</div>
                     <div>%%billingAddress%%</div>
                     <div>%%billingCityStateZip%%</div>
@@ -638,19 +632,31 @@
 
                 <div>
                     <table class="bordered-table">
-                        <caption><b>Requests/Complaints</b></caption>
+                        <caption><b>Service Requests</b></caption>
                         <thead></thead>
                         <tbody>
                             %%ticketComplaint%%
                             <tr>
                                 <td>&nbsp;</td>
                             </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div class="invoice-section">
+
+                <table class="bordered-table">
+                    <caption><b>Service Description & Notes</b></caption>
+                    <thead></thead>
+                    <tbody>
+                        %%ticketServiceNotes%%
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
 
             <div class="invoice-section">
@@ -705,24 +711,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div class="invoice-section">
-
-                <table class="bordered-table">
-                    <caption><b>Service Description & Notes</b></caption>
-                    <thead></thead>
-                    <tbody>
-                        %%ticketServiceNotes%%
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-
             </div>
 
             <div class="invoice-section">

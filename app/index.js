@@ -15,9 +15,14 @@ app.use(express.static(__dirname + '/../../appliance-point-of-sale/dist/'));
 // Proxy to send the /ShoreTVCustomers requests to 9083
 var shoreTvCustomersProxy = proxy({
   target: 'http://localhost:9083',
-  changeOrigin: true,
+  changeOrigin: false,
   pathRewrite: {
-    '^/ShoreTVCustomers/ServiceTickets/customers': '/ShoreTVCustomers/Customers/customers',
+    '^/ShoreTVCustomers/ServiceTickets/customers': '/customers',
+    '^/ShoreTVCustomers/ServiceTickets/customerTickets': '/customerTickets',
+    '^/ShoreTVCustomers/ServiceTickets/tickets': '/tickets',
+    '^/ShoreTVCustomers/ServiceTickets/quotes': '/quotes',
+    '^/ShoreTVCustomers/ServiceTickets/payments': '/payments',
+    '^/ShoreTVCustomers/ServiceTickets/serviceCalls': '/serviceCalls',
     '^/ShoreTVCustomers/ServiceTickets/UI001/': '/',
     '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice'
   },
@@ -29,7 +34,23 @@ var shoreTvCustomersProxy = proxy({
   }
 });
 
+var serviceTicketsProxy = proxy({
+  target: 'http://localhost:9083',
+  changeOrigin: false,
+});
+
+var customersProxy = proxy({
+  target: 'http://localhost:9084',
+  changeOrigin: false,
+});
+
 app.use('/ShoreTVCustomers', shoreTvCustomersProxy);
+app.use('/customers', customersProxy);
+app.use('/tickets', serviceTicketsProxy);
+app.use('/ticketsCustomer', serviceTicketsProxy);
+app.use('/serviceCalls', serviceTicketsProxy);
+app.use('/payments', serviceTicketsProxy);
+app.use('/quotes', serviceTicketsProxy);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -153,26 +174,30 @@ function replaceAll(str, find, replace) {
 }
 
 function formatPhoneNumber(phoneNumber) {
-  if (!phoneNumber) { return ''; }
+  if (!phoneNumber) {
+    return '';
+  } else if (/^[0-9-() ]*$/.test(phoneNumber)) {
+    var value = phoneNumber.toString().trim().replace(/[^0-9]/, '');
 
-  var value = phoneNumber.toString().trim().replace(/[^0-9]/, '');
+    switch (value.length) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return value;
 
-  switch (value.length) {
-  case 0:
-  case 1:
-  case 2:
-  case 3:
-    return value;
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return value.slice(0, 3) + '-' + value.slice(3);
 
-  case 4:
-  case 5:
-  case 6:
-  case 7:
-    return value.slice(0, 3) + '-' + value.slice(3);
-
-  default:
-    var base = value.slice(3);
-    return '(' + value.slice(0, 3) + ') ' + base.slice(0, 3) + '-' + base.slice(3, 7);
+    default:
+      var base = value.slice(3);
+      return '(' + value.slice(0, 3) + ') ' + base.slice(0, 3) + '-' + base.slice(3, 7);
+    }
+  } else {
+    return phoneNumber;
   }
 }
 
@@ -230,7 +255,7 @@ function createInvoice(data) {
     invoice = replaceAll(invoice, constants.billingPhone1, formatPhoneNumber(_.get(data.ticket, 'billingPhone1', '')));
     invoice = replaceAll(invoice, constants.billingPhone2, formatPhoneNumber(_.get(data.ticket, 'billingPhone2', '')));
   } else {
-    invoice = replaceAll(invoice, constants.billingName, _.get(data.customer, 'firstName', '') + ' ' + _.get(data.ticket, 'lastName', ''));
+    invoice = replaceAll(invoice, constants.billingName, _.get(data.customer, 'firstName', '') + ' ' + _.get(data.customer, 'lastName', ''));
     invoice = replaceAll(invoice, constants.billingAddress, _.get(data.customer, 'address', ''));
 
     invoice = replaceAll(invoice, constants.billingCityStateZip, customerCityStateZip);
