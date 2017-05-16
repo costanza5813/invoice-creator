@@ -5,6 +5,7 @@ var fs = require('fs');
 var pdf = require('html-pdf');
 var uuid = require('uuid/v4');
 var proxy = require('http-proxy-middleware');
+var moment = require('moment');
 
 var app = express();
 app.set('port', 9085);
@@ -201,6 +202,17 @@ function formatPhoneNumber(phoneNumber) {
   }
 }
 
+function formatDateTimeRange(dateTime) {
+  if (!dateTime) {
+    return '';
+  }
+
+  var begin = moment(dateTime, 'MM/DD/YYYY h:mm a');
+  var end = moment(begin).add(2, 'h');
+
+  return begin.format('l LT') + ' - ' + end.format('LT');
+}
+
 function formatCurrency(amount) {
   var sign = parseFloat(amount.toFixed(2)) < 0 ? "-" : "";
 
@@ -319,7 +331,8 @@ function createInvoice(data) {
   var serviceCallListReplace = '';
   _.each(_.get(data.ticket, 'serviceCalls', []), function(sc) {
     var serviceCallCopy = serviceCallTpl;
-    serviceCallCopy = replaceAll(serviceCallCopy, constants.ticketServiceCallListDateTime, _.get(sc, 'serviceDate', ''));
+    var dateTimeRange = formatDateTimeRange(_.get(sc, 'serviceDate', ''));
+    serviceCallCopy = replaceAll(serviceCallCopy, constants.ticketServiceCallListDateTime, dateTimeRange);
     serviceCallCopy = replaceAll(serviceCallCopy, constants.ticketServiceCallListTech, _.get(sc, 'tech', ''));
 
     serviceCallListReplace += serviceCallCopy;

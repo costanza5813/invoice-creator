@@ -68,8 +68,12 @@ html, body {
     margin-right: 15px;
 }
 
-.product-info b {
-    margin-right: 10px;
+.product-info tr {
+    line-height: 22px;
+}
+
+.service-description {
+    width: 386px;
 }
 
 .bordered-table {
@@ -92,12 +96,12 @@ td span {
 }
 
 .service-calls {
-    width: 350px;
+    width: 390px;
     margin-right: 30px;
 }
 
 .payments {
-    width: 390px;
+    width: 350px;
 }
 
 .pull-right  {
