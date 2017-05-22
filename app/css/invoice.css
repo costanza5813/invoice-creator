@@ -76,6 +76,26 @@ html, body {
     width: 386px;
 }
 
+.service-description table {
+    table-layout: fixed;
+    font-size: 12px;
+    line-height: 19px;
+}
+
+.service-description caption {
+    font-size: 14px;
+}
+
+.customer-service-description table {
+    table-layout: fixed;
+    font-size: 12px;
+    line-height: 19px;
+}
+
+.customer-service-description caption {
+    font-size: 14px;
+}
+
 .bordered-table {
     width: 100%;
     border-collapse: collapse;
@@ -92,6 +112,10 @@ html, body {
 }
 
 td span {
+    margin: 0 10px;
+}
+
+td h3 {
     margin: 0 10px;
 }
 
@@ -119,4 +143,16 @@ td span {
 .signature-table {
     width: 100%;
     margin-top: 60px;
+}
+
+.total-cell {
+    min-width: 100px;
+}
+
+.underline-totals tr {
+    line-height: 28px;
+}
+
+.underline-totals .total-cell {
+    border-bottom: 1px solid black;
 }

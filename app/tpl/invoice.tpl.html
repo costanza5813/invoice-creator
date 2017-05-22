@@ -57,12 +57,12 @@
                         <thead></thead>
                         <tbody>
                             <tr>
-                                <td class="text-right"><span><b>Item:</b></span></td>
-                                <td>%%productItem%%</td>
-                            </tr>
-                            <tr>
                                 <td class="text-right"><span><b>Brand:</b></span></td>
                                 <td>%%productBrand%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Item:</b></span></td>
+                                <td>%%productItem%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Model:</b></span></td>
@@ -83,23 +83,20 @@
 
             </div>
 
-            <div class="invoice-section">
-
-                <div>
-                    <table class="bordered-table">
-                        <caption><b>Service Requests</b></caption>
-                        <thead></thead>
-                        <tbody>
-                            %%ticketComplaint%%
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="invoice-section customer-service-description">
+                <table class="bordered-table">
+                    <caption><b>Service Requests</b></caption>
+                    <thead></thead>
+                    <tbody>
+                        %%ticketComplaint%%
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="invoice-section">
@@ -190,20 +187,20 @@
                 </div>
 
                 <div class="inline-block payments align-top">
-                    <table class="pull-right">
+                    <table class="pull-right ___underline-totals___">
                         <thead></thead>
                         <tbody class="text-right">
                             <tr>
                                 <td><span><b>Subtotal:</b></span></td>
-                                <td><span>%%ticketSubtotal%%</span></td>
+                                <td class="total-cell"><span>%%ticketSubtotal%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Tax:</b></span></td>
-                                <td><span>%%ticketTax%%</span></td>
+                                <td class="total-cell"><span>%%ticketTax%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Total:</b></span></td>
-                                <td><span>%%ticketTotal%%</span></td>
+                                <td class="total-cell"><span>%%ticketTotal%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -232,16 +229,16 @@
                         </tbody>
                     </table>
 
-                    <table class="pull-right total-due">
+                    <table class="pull-right total-due ___underline-totals___">
                         <thead></thead>
                         <tbody class="text-right">
                             <tr>
-                                <td><span><h2><b>Amount Paid:</b></h2></span></td>
-                                <td><span>%%ticketAmountPaid%%</span></td>
+                                <td><h3><b>Amount Paid:</b></h3></td>
+                                <td class="total-cell"><span>%%ticketAmountPaid%%</span></td>
                             </tr>
                             <tr>
-                                <td><span><h2><b>Balance Due:</b></h2></span></td>
-                                <td><span>%%ticketBalanceDue%%</span></td>
+                                <td><h3><b>Balance Due:</b></span></td>
+                                <td class="total-cell"><span>%%ticketBalanceDue%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -304,12 +301,12 @@
                         <thead></thead>
                         <tbody>
                             <tr>
-                                <td class="text-right"><span><b>Item:</b></span></td>
-                                <td>%%productItem%%</td>
-                            </tr>
-                            <tr>
                                 <td class="text-right"><span><b>Brand:</b></span></td>
                                 <td>%%productBrand%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Item:</b></span></td>
+                                <td>%%productItem%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Model:</b></span></td>
@@ -479,15 +476,15 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><b>Subtotal:</b></span></td>
-                                <td><span>%%ticketSubtotal%%</span></td>
+                                <td class="total-cell"><span>%%ticketSubtotal%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Tax:</b></span></td>
-                                <td><span>%%ticketTax%%</span></td>
+                                <td class="total-cell"><span>%%ticketTax%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Total:</b></span></td>
-                                <td><span>%%ticketTotal%%</span></td>
+                                <td class="total-cell"><span>%%ticketTotal%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -520,12 +517,12 @@
                         <thead></thead>
                         <tbody class="text-right">
                             <tr>
-                                <td><span><h2><b>Amount Paid:</b></h2></span></td>
-                                <td><span>%%ticketAmountPaid%%</span></td>
+                                <td><h3><b>Amount Paid:</b></h3></td>
+                                <td class="total-cell"><span>%%ticketAmountPaid%%</span></td>
                             </tr>
                             <tr>
-                                <td><span><h2><b>Balance Due:</b></h2></span></td>
-                                <td><span>%%ticketBalanceDue%%</span></td>
+                                <td><h3><b>Balance Due:</b></span></td>
+                                <td class="total-cell"><span>%%ticketBalanceDue%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -588,12 +585,12 @@
                         <thead></thead>
                         <tbody>
                             <tr>
-                                <td class="text-right"><span><b>Item:</b></span></td>
-                                <td>%%productItem%%</td>
-                            </tr>
-                            <tr>
                                 <td class="text-right"><span><b>Brand:</b></span></td>
                                 <td>%%productBrand%%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span><b>Item:</b></span></td>
+                                <td>%%productItem%%</td>
                             </tr>
                             <tr>
                                 <td class="text-right"><span><b>Model:</b></span></td>
@@ -684,22 +681,6 @@
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                             </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -736,15 +717,15 @@
                         <tbody class="text-right">
                             <tr>
                                 <td><span><b>Subtotal:</b></span></td>
-                                <td><span>%%ticketSubtotal%%</span></td>
+                                <td class="total-cell"><span>%%ticketSubtotal%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Tax:</b></span></td>
-                                <td><span>%%ticketTax%%</span></td>
+                                <td class="total-cell"><span>%%ticketTax%%</span></td>
                             </tr>
                             <tr>
                                 <td><span><b>Total:</b></span></td>
-                                <td><span>%%ticketTotal%%</span></td>
+                                <td class="total-cell"><span>%%ticketTotal%%</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -777,12 +758,12 @@
                         <thead></thead>
                         <tbody class="text-right">
                             <tr>
-                                <td><span><h2><b>Amount Paid:</b></h2></span></td>
-                                <td><span>%%ticketAmountPaid%%</span></td>
+                                <td><h3><b>Amount Paid:</b></h3></td>
+                                <td class="total-cell"><span>%%ticketAmountPaid%%</span></td>
                             </tr>
                             <tr>
-                                <td><span><h2><b>Balance Due:</b></h2></span></td>
-                                <td><span>%%ticketBalanceDue%%</span></td>
+                                <td><h3><b>Balance Due:</b></span></td>
+                                <td class="total-cell"><span>%%ticketBalanceDue%%</span></td>
                             </tr>
                         </tbody>
                     </table>

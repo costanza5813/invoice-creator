@@ -168,10 +168,16 @@ var constants = {
   ticketTotal: '%%ticketTotal%%',
   ticketAmountPaid: '%%ticketAmountPaid%%',
   ticketBalanceDue: '%%ticketBalanceDue%%',
+
+  underlineTotals: '___underline-totals___'
 };
 
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function replaceFirst(str, find, replace) {
+  return str.replace(new RegExp(find), replace);
 }
 
 function formatPhoneNumber(phoneNumber) {
@@ -357,6 +363,15 @@ function createInvoice(data) {
   invoice = replaceAll(invoice, constants.ticketPaymentList, paymentListReplace);
 
   // totals
+  if (data.ticket.hideCustomerTotals) {
+    invoice = replaceAll(invoice, constants.underlineTotals, constants.underlineTotals.replace(/_/g, ''));
+    invoice = replaceFirst(invoice, constants.ticketSubtotal, '');
+    invoice = replaceFirst(invoice, constants.ticketTax, '');
+    invoice = replaceFirst(invoice, constants.ticketTotal, '');
+    invoice = replaceFirst(invoice, constants.ticketAmountPaid, '');
+    invoice = replaceFirst(invoice, constants.ticketBalanceDue, '');
+  }
+
   invoice = replaceAll(invoice, constants.ticketSubtotal, formatCurrency(_.get(data.ticket, 'subtotal', 0)));
   invoice = replaceAll(invoice, constants.ticketTax, formatCurrency(_.get(data.ticket, 'tax', 0)));
   invoice = replaceAll(invoice, constants.ticketTotal, formatCurrency(_.get(data.ticket, 'total', 0)));
