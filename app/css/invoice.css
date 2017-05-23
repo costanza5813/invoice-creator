@@ -72,10 +72,6 @@ html, body {
     line-height: 22px;
 }
 
-.service-description {
-    width: 386px;
-}
-
 .service-description table {
     table-layout: fixed;
     font-size: 12px;
@@ -83,16 +79,6 @@ html, body {
 }
 
 .service-description caption {
-    font-size: 14px;
-}
-
-.customer-service-description table {
-    table-layout: fixed;
-    font-size: 12px;
-    line-height: 19px;
-}
-
-.customer-service-description caption {
     font-size: 14px;
 }
 
