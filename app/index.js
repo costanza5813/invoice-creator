@@ -216,7 +216,7 @@ function formatDateTimeRange(dateTime) {
   var begin = moment(dateTime, 'MM/DD/YYYY h:mm a');
   var end = moment(begin).add(2, 'h');
 
-  return begin.format('l LT') + ' - ' + end.format('LT');
+  return begin.format('l, ddd, h a') + ' - ' + end.format('h a');
 }
 
 function formatCurrency(amount) {
