@@ -1,6 +1,8 @@
+'use strict';
+
 var _ = require('lodash');
 var express = require('express');
-var bodyParser = require("body-parser");
+var bodyParser = require('body-parser');
 var fs = require('fs');
 var pdf = require('html-pdf');
 var uuid = require('uuid/v4');
@@ -25,14 +27,14 @@ var shoreTvCustomersProxy = proxy({
     '^/ShoreTVCustomers/ServiceTickets/payments': '/payments',
     '^/ShoreTVCustomers/ServiceTickets/serviceCalls': '/serviceCalls',
     '^/ShoreTVCustomers/ServiceTickets/UI001/': '/',
-    '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice'
+    '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice',
   },
   router: {
     '/ShoreTVCustomers/Customers/customers': 'http://localhost:9084',
     '/ShoreTVCustomers/ServiceTickets/customers': 'http://localhost:9084',
     '/ShoreTVCustomers/ServiceTickets/UI001': 'http://localhost:9085',
-    '/ShoreTVCustomers/ServiceTickets/invoice': 'http://localhost:9085'
-  }
+    '/ShoreTVCustomers/ServiceTickets/invoice': 'http://localhost:9085',
+  },
 });
 
 var serviceTicketsProxy = proxy({
@@ -58,7 +60,7 @@ app.use(bodyParser.json());
 
 var config = {
   format: 'letter',
-  base: 'file:///' + __dirname.replace(/\\/g, '/') + '/'
+  base: 'file:///' + __dirname.replace(/\\/g, '/') + '/',
 };
 
 //
@@ -98,7 +100,7 @@ app.get('/invoice/:id', function (req, res) {
     return;
   }
 
-  res.contentType("application/pdf");
+  res.contentType('application/pdf');
   res.send(fs.readFileSync(filePath));
 });
 
@@ -117,7 +119,6 @@ var constants = {
   partTemplate: './app/tpl/part.tpl.html',
   paymentTemplate: './app/tpl/payment.tpl.html',
   serviceCallTemplate: './app/tpl/service-call.tpl.html',
-  serviceNotesTemplate: './app/tpl/service-note.tpl.html',
 
   invoiceNumber: '%%invoiceNumber%%',
   ticketDateOpen: '%%ticketDateOpen%%',
@@ -151,9 +152,6 @@ var constants = {
   ticketPartListPartQuantity: '%%ticketPartListPartQuantity%%',
   ticketPartListPartTotal: '%%ticketPartListPartTotal%%',
 
-  ticketServiceNotes: '%%ticketServiceNotes%%',
-  ticketServiceNotesLine: '%%ticketServiceNotesLine%%',
-
   ticketServiceCallList: '%%ticketServiceCallList%%',
   ticketServiceCallListDateTime: '%%ticketServiceCallListDateTime%%',
   ticketServiceCallListTech: '%%ticketServiceCallListTech%%',
@@ -169,7 +167,7 @@ var constants = {
   ticketAmountPaid: '%%ticketAmountPaid%%',
   ticketBalanceDue: '%%ticketBalanceDue%%',
 
-  underlineTotals: '___underline-totals___'
+  underlineTotals: '___underline-totals___',
 };
 
 function replaceAll(str, find, replace) {
@@ -220,13 +218,13 @@ function formatDateTimeRange(dateTime) {
 }
 
 function formatCurrency(amount) {
-  var sign = parseFloat(amount.toFixed(2)) < 0 ? "-" : "";
+  var sign = parseFloat(amount.toFixed(2)) < 0 ? '-' : '';
 
   var wholePart = parseInt(Math.abs(amount)).toString();
   var highestPartLength = wholePart.length > 3 ? wholePart.length % 3 : 0;
 
-  var retVal = sign + '$' + (highestPartLength ? wholePart.substr(0, highestPartLength) + ',' : "");
-  retVal += wholePart.substr(highestPartLength).replace(/(\d{3})(?=\d)/g, "$1" + ',');
+  var retVal = sign + '$' + (highestPartLength ? wholePart.substr(0, highestPartLength) + ',' : '');
+  retVal += wholePart.substr(highestPartLength).replace(/(\d{3})(?=\d)/g, '$1' + ',');
   retVal += '.' + (Math.abs(amount) - wholePart).toFixed(2).slice(2);
 
   return retVal;
@@ -242,7 +240,8 @@ function createInvoice(data) {
   invoice = replaceAll(invoice, constants.ticketDateOpen, _.get(data.ticket, 'dateOpen', ''));
 
   // customer info
-  invoice = replaceAll(invoice, constants.customerName, _.get(data.customer, 'firstName', '') + ' ' + _.get(data.customer, 'lastName', ''));
+  invoice = replaceAll(invoice, constants.customerName,
+                       _.get(data.customer, 'firstName', '') + ' ' + _.get(data.customer, 'lastName', ''));
   invoice = replaceAll(invoice, constants.customerAddress, _.get(data.customer, 'address', ''));
 
   var customerCity = _.get(data.customer, 'city', '');
@@ -257,9 +256,20 @@ function createInvoice(data) {
   invoice = replaceAll(invoice, constants.customerPhone2, formatPhoneNumber(_.get(data.customer, 'workNumber', '')));
 
   // billing info
-  var billingKeys = ['billingName', 'billingLastName', 'billingAddress', 'billingCity', 'billingState', 'billingZip', 'billingPhone1', 'billingPhone2'];
-  if(_.chain(data.ticket).pick(billingKeys).some().value()) {
-    invoice = replaceAll(invoice, constants.billingName, _.get(data.ticket, 'billingName', '') + ' ' + _.get(data.ticket, 'billingLastName', ''));
+  var billingKeys = [
+    'billingName',
+    'billingLastName',
+    'billingAddress',
+    'billingCity',
+    'billingState',
+    'billingZip',
+    'billingPhone1',
+    'billingPhone2',
+  ];
+
+  if (_.chain(data.ticket).pick(billingKeys).some().value()) {
+    invoice = replaceAll(invoice, constants.billingName,
+                         _.get(data.ticket, 'billingName', '') + ' ' + _.get(data.ticket, 'billingLastName', ''));
     invoice = replaceAll(invoice, constants.billingAddress, _.get(data.ticket, 'billingAddress', ''));
 
     var billingCity = _.get(data.ticket, 'billingCity', '');
@@ -273,7 +283,8 @@ function createInvoice(data) {
     invoice = replaceAll(invoice, constants.billingPhone1, formatPhoneNumber(_.get(data.ticket, 'billingPhone1', '')));
     invoice = replaceAll(invoice, constants.billingPhone2, formatPhoneNumber(_.get(data.ticket, 'billingPhone2', '')));
   } else {
-    invoice = replaceAll(invoice, constants.billingName, _.get(data.customer, 'firstName', '') + ' ' + _.get(data.customer, 'lastName', ''));
+    invoice = replaceAll(invoice, constants.billingName,
+                         _.get(data.customer, 'firstName', '') + ' ' + _.get(data.customer, 'lastName', ''));
     invoice = replaceAll(invoice, constants.billingAddress, _.get(data.customer, 'address', ''));
 
     invoice = replaceAll(invoice, constants.billingCityStateZip, customerCityStateZip);
@@ -292,7 +303,7 @@ function createInvoice(data) {
   // customer complaints
   var complaintTpl =  fs.readFileSync(constants.complaintTemplate, 'utf8');
   var complaintReplace = '';
-  _.each(_.get(data.ticket, 'customerComplaint', '').split('\n'), function(line) {
+  _.each(_.get(data.ticket, 'customerComplaint', '').split('\n'), function (line) {
     if (!line) {
       return true;
     }
@@ -305,7 +316,7 @@ function createInvoice(data) {
   //parts list
   var partTpl =  fs.readFileSync(constants.partTemplate, 'utf8');
   var partListReplace = '';
-  _.each(_.get(data.ticket, 'parts', []), function(part) {
+  _.each(_.get(data.ticket, 'parts', []), function (part) {
     var partCopy = partTpl;
     partCopy = replaceAll(partCopy, constants.ticketPartListPartBrand, _.get(part, 'brand', ''));
     partCopy = replaceAll(partCopy, constants.ticketPartListPartDescription, _.get(part, 'description', ''));
@@ -319,23 +330,10 @@ function createInvoice(data) {
 
   invoice = replaceAll(invoice, constants.ticketPartList, partListReplace);
 
-  // service notes
-  var serviceNotesTpl =  fs.readFileSync(constants.serviceNotesTemplate, 'utf8');
-  var serviceNotesReplace = '';
-  _.each(_.get(data.ticket, 'serviceDescription', '').split('\n'), function(line) {
-    if (!line) {
-      return true;
-    }
-
-    serviceNotesReplace += replaceAll(serviceNotesTpl, constants.ticketServiceNotesLine, line);
-  });
-
-  invoice = replaceAll(invoice, constants.ticketServiceNotes, serviceNotesReplace);
-
   // service call list
   var serviceCallTpl =  fs.readFileSync(constants.serviceCallTemplate, 'utf8');
   var serviceCallListReplace = '';
-  _.each(_.get(data.ticket, 'serviceCalls', []), function(sc) {
+  _.each(_.get(data.ticket, 'serviceCalls', []), function (sc) {
     var serviceCallCopy = serviceCallTpl;
     var dateTimeRange = formatDateTimeRange(_.get(sc, 'serviceDate', ''));
     serviceCallCopy = replaceAll(serviceCallCopy, constants.ticketServiceCallListDateTime, dateTimeRange);
@@ -349,13 +347,14 @@ function createInvoice(data) {
   // payment list
   var paymentTpl =  fs.readFileSync(constants.paymentTemplate, 'utf8');
   var paymentListReplace = '';
-  _.each(_.get(data.ticket, 'payments', []), function(payment) {
+  _.each(_.get(data.ticket, 'payments', []), function (payment) {
     var paymentCopy = paymentTpl;
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentDate, _.get(payment, 'paymentDate', ''));
 
     var pymntType = constants.paymentTypes[payment.paymentType] || '';
     paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentType, pymntType);
-    paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentAmount, formatCurrency(_.get(payment, 'paymentAmount', 0) * -1));
+    paymentCopy = replaceAll(paymentCopy, constants.ticketPaymentListPaymentAmount,
+                             formatCurrency(_.get(payment, 'paymentAmount', 0) * -1));
 
     paymentListReplace += paymentCopy;
   });
