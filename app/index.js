@@ -156,6 +156,8 @@ var constants = {
   ticketServiceCallListDateTime: '%%ticketServiceCallListDateTime%%',
   ticketServiceCallListTech: '%%ticketServiceCallListTech%%',
 
+  ticketSalesperson: '%%ticketSalesperson%%',
+
   ticketPaymentList: '%%ticketPaymentList%%',
   ticketPaymentListPaymentDate: '%%ticketPaymentListPaymentDate%%',
   ticketPaymentListPaymentType: '%%ticketPaymentListPaymentType%%',
@@ -343,6 +345,9 @@ function createInvoice(data) {
   });
 
   invoice = replaceAll(invoice, constants.ticketServiceCallList, serviceCallListReplace);
+
+  // salesperson
+  invoice = replaceAll(invoice, constants.ticketSalesperson, _.get(data.ticket, 'salesperson', ''));
 
   // payment list
   var paymentTpl =  fs.readFileSync(constants.paymentTemplate, 'utf8');

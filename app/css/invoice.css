@@ -142,3 +142,11 @@ td h3 {
 .underline-totals .total-cell {
     border-bottom: 1px solid black;
 }
+
+.salesperson {
+    margin-top: 20px;
+}
+
+.salesperson span:first-of-type {
+    margin-right: 10px;
+}
