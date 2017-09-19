@@ -5,9 +5,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var pdf = require('html-pdf');
-var uuid = require('uuid/v4');
 var proxy = require('http-proxy-middleware');
 var moment = require('moment');
+var rp = require('request-promise');
+var Promise = require('bluebird');
 
 var app = express();
 app.set('port', 9085);
@@ -27,13 +28,13 @@ var shoreTvCustomersProxy = proxy({
     '^/ShoreTVCustomers/ServiceTickets/payments': '/payments',
     '^/ShoreTVCustomers/ServiceTickets/serviceCalls': '/serviceCalls',
     '^/ShoreTVCustomers/ServiceTickets/UI001/': '/',
-    '^/ShoreTVCustomers/ServiceTickets/invoice': '/invoice',
+    '^/ShoreTVCustomers/ServiceTickets/printable-ticket': '/printable-ticket',
   },
   router: {
     '/ShoreTVCustomers/Customers/customers': 'http://localhost:9084',
     '/ShoreTVCustomers/ServiceTickets/customers': 'http://localhost:9084',
     '/ShoreTVCustomers/ServiceTickets/UI001': 'http://localhost:9085',
-    '/ShoreTVCustomers/ServiceTickets/invoice': 'http://localhost:9085',
+    '/ShoreTVCustomers/ServiceTickets/printable-ticket': 'http://localhost:9085',
   },
 });
 
@@ -63,45 +64,83 @@ var config = {
   base: 'file:///' + __dirname.replace(/\\/g, '/') + '/',
 };
 
-//
-// post to invoice to create the pdf file
-//
-app.post('/invoice', function (req, res) {
+/*
+ * endpoint: /printable-ticket/
+ * Fetches all ticket and customer data and returns a pdf ticket
+ */
+app.get('/printable-ticket/:ticketId', function (req, res) {
+  const ticketHref = 'http://localhost:9085/tickets/' + req.params.ticketId;
+  rp.get(ticketHref, { json: true }).then((body) => {
+    const data = {
+      ticket: body,
+      customer: null,
+    };
 
-  if (!req.body.customer || !req.body.ticket) {
-    res.status(400).send('You must include customer and ticket details!');
-    return;
-  }
+    data.ticket.id = req.params.ticketId;
+    data.ticket.hideCustomerTotals = req.query.hideCustomerTotals === 'true';
 
-  var invoice = createInvoice(req.body);
-  var id = uuid();
-  pdf.create(invoice, config).toFile('./app/tmp/' + id + '.pdf', function (err) {
-    if (err) {
-      res.status(500).send(err);
-      return;
+    const customerHref = _.get(data.ticket, '_links.customer.href');
+    const quotesHref = _.get(data.ticket, '_links.quotes.href');
+    const serviceCallsHref = _.get(data.ticket, '_links.serviceCalls.href');
+    const paymentsHref = _.get(data.ticket, '_links.payments.href');
+
+    if (!customerHref || !quotesHref || !serviceCallsHref || !paymentsHref) {
+      res.status(404).send({
+        message: 'Ticket not found!',
+      });
     }
 
-    res.json({ invoiceId: id });
+    const promises = [];
+
+    // get the customer
+    promises.push(rp.get(customerHref, { json: true }).then((body) => {
+      data.customer = body;
+    }));
+
+    // get the quotes
+    promises.push(rp.get(quotesHref, { json: true }).then((body) => {
+      const quotes = _.get(body, '_embedded.quotes');
+
+      if (!quotes) {
+        return Promise.reject('Quotes not found!');
+      }
+
+      data.ticket.parts = quotes;
+    }));
+
+    // get the service calls
+    promises.push(rp.get(serviceCallsHref, { json: true }).then((body) => {
+      const serviceCalls = _.get(body, '_embedded.serviceCalls');
+
+      if (!serviceCalls) {
+        return Promise.reject('Service calls not found!');
+      }
+
+      data.ticket.serviceCalls = serviceCalls;
+    }));
+
+    // get the payments
+    promises.push(rp.get(paymentsHref, { json: true }).then((body) => {
+      const payments = _.get(body, '_embedded.payments');
+
+      if (!payments) {
+        return Promise.reject('Payments not found!');
+      }
+
+      data.ticket.payments = payments;
+    }));
+
+    Promise.all(promises).then(() => {
+      pdf.create(createInvoice(data), config).toStream((err, stream) => {
+        res.contentType('application/pdf');
+        stream.pipe(res);
+      });
+    }).catch((errors) => {
+      res.status(404).send({
+        message: _.first(errors),
+      });
+    });
   });
-});
-
-//
-// get the created pdf file with the specified id
-//
-app.get('/invoice/:id', function (req, res) {
-  if (!req.params.id) {
-    res.status(400).send('You must include the invoice id!');
-    return;
-  }
-
-  var filePath = './app/tmp/' + req.params.id + '.pdf';
-  if (!fs.existsSync(filePath)) {
-    res.status(404).send('Invoice not found!');
-    return;
-  }
-
-  res.contentType('application/pdf');
-  res.send(fs.readFileSync(filePath));
 });
 
 app.listen(app.get('port'), function () {
@@ -187,21 +226,21 @@ function formatPhoneNumber(phoneNumber) {
     var value = phoneNumber.toString().trim().replace(/[^0-9]/, '');
 
     switch (value.length) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return value;
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+        return value;
 
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-      return value.slice(0, 3) + '-' + value.slice(3);
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+        return value.slice(0, 3) + '-' + value.slice(3);
 
-    default:
-      var base = value.slice(3);
-      return '(' + value.slice(0, 3) + ') ' + base.slice(0, 3) + '-' + base.slice(3, 7);
+      default:
+        var base = value.slice(3);
+        return '(' + value.slice(0, 3) + ') ' + base.slice(0, 3) + '-' + base.slice(3, 7);
     }
   } else {
     return phoneNumber;
