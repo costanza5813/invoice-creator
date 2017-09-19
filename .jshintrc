@@ -19,6 +19,9 @@
   // Define globals exposed by Node.js.
   "node": true,
 
+  // Use es6 features
+  "esversion": 6,
+
   /*
    * ENFORCING OPTIONS
    * =================
